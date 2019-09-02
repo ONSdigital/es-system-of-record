@@ -57,10 +57,10 @@ def lambda_handler(event, context):
                 "body": {"Error": "Failed To Connect To The Database."}}
 
     try:
-        table_list = {'contributor': None,
-                      'survey_enrolment': None,
-                      'survey_contact': None,
-                      'contributor_survey_period': None}
+        table_list = {'contributor': io_validation.Contributor(),
+                      'survey_enrolment': io_validation.SurveyEnrolment(),
+                      'survey_contact': io_validation.CombinedContact(),
+                      'contributor_survey_period': io_validation.CombinedContributorSurveyPeriod()}
 
         for current_table in table_list:
             logger.info("Fetching Table Model: {}".format(current_table))
@@ -101,7 +101,8 @@ def lambda_handler(event, context):
                                    table_model.columns.ru_reference == ref))
 
             logger.info("Fetching Table Data: {}".format(current_table))
-            table_data = alchemy_functions.select(statement, session)
+            table_data = alchemy_functions.select(statement, session, table_list[current_table])
+            #table_data = alchemy_functions.select(statement, session)
             table_list[current_table] = table_data
     except db.exc.OperationalError as exc:
         logger.error(
@@ -109,43 +110,69 @@ def lambda_handler(event, context):
         return {"statusCode": 500,
                 "body": {"Error": "Operation Error, Failed To Retrieve Data."}}
     except Exception as exc:
+        print(exc.__traceback__.tb_lineno)
         logger.error("Problem Retrieving Data From The Table: {}".format(exc))
         return {"statusCode": 500,
                 "body": {"Error": "Failed To Retrieve Data."}}
 
     logger.info("Creating JSON.")
-    out_json = json.dumps(table_list["contributor"].to_dict(orient='records'),
-                          sort_keys=True, default=str)
+    #out_json = json.dumps(table_list["contributor"].to_dict(orient='records'),
+        #                  sort_keys=True, default=str)
+    out_json = table_list["contributor"]
+
+
     if not out_json == "[]":
-        out_json = out_json[1:-2]
-        out_json += ',"Surveys":[ '
+        #out_json = out_json[1:-2]
+        #out_json += ',"Surveys":[ '
 
-        for index, row in table_list['survey_enrolment'].iterrows():
-            curr_row = table_list['survey_enrolment'][(
-                    table_list['survey_enrolment']['survey_code'] ==
-                    row['survey_code'])]
-            curr_row = json.dumps(curr_row.to_dict(orient='records'),
-                                  sort_keys=True, default=str)
-            curr_row = curr_row[2:-2]
+        for contrib in table_list['contributor']:
+            surveys=[]
+            for survey in table_list['survey_enrolment']:
+                contacts = []
+                for survey_contact in table_list['survey_contact']:
+                     if(survey['survey_code'] == survey_contact['survey_code']):
+                         contacts.append(survey_contact)
+                survey['Contacts'] = contacts
 
-            out_json = out_json + "{" + curr_row + ',"Contacts":'
-            curr_con = table_list['survey_contact'][(
-                    table_list['survey_contact']['survey_code'] ==
-                    row['survey_code'])]
-            curr_con = json.dumps(curr_con.to_dict(orient='records'),
-                                  sort_keys=True, default=str)
-            out_json += curr_con
+                cont_periods=[]
+                for cont_survey_period in table_list['contributor_survey_period']:
+                     if(survey['survey_code'] == cont_survey_period['survey_code']):
+                         cont_periods.append(cont_survey_period)
+                survey['Periods'] = cont_periods
 
-            out_json = out_json + ',"Periods":'
-            curr_per = table_list['contributor_survey_period'][(
-                    table_list['contributor_survey_period']['survey_code'] ==
-                    row['survey_code'])]
-            curr_per = json.dumps(curr_per.to_dict(orient='records'),
-                                  sort_keys=True, default=str)
-            out_json += curr_per + '},'
+                if (survey['ru_reference'] == contrib['ru_reference']):
+                    surveys.append(survey)
+            contrib['Surveys'] = surveys
 
-        out_json = out_json[:-1]
-        out_json += ']}'
+        print(contrib)
+        # # print(json.loads(table_list['survey_enrolment']))
+        # #print(table_list['contributor_survey_period'])
+        # for index, row in table_list['survey_enrolment'].iterrows():
+        #     curr_row = table_list['survey_enrolment'][(
+        #             table_list['survey_enrolment']['survey_code'] ==
+        #             row['survey_code'])]
+        #     curr_row = json.dumps(curr_row.to_dict(orient='records'),
+        #                           sort_keys=True, default=str)
+        #     curr_row = curr_row[2:-2]
+        #
+        #     out_json = out_json + "{" + curr_row + ',"Contacts":'
+        #     curr_con = table_list['survey_contact'][(
+        #             table_list['survey_contact']['survey_code'] ==
+        #             row['survey_code'])]
+        #     curr_con = json.dumps(curr_con.to_dict(orient='records'),
+        #                           sort_keys=True, default=str)
+        #     out_json += curr_con
+        #
+        #     out_json = out_json + ',"Periods":'
+        #     curr_per = table_list['contributor_survey_period'][(
+        #             table_list['contributor_survey_period']['survey_code'] ==
+        #             row['survey_code'])]
+        #     curr_per = json.dumps(curr_per.to_dict(orient='records'),
+        #                           sort_keys=True, default=str)
+        #     out_json += curr_per + '},'
+        #
+        # out_json = out_json[:-1]
+        # out_json += ']}'
 
     try:
         logger.info("Closing Session.")
@@ -168,4 +195,7 @@ def lambda_handler(event, context):
         return {"statusCode": 500, "body": {"Error": exc.messages}}
 
     logger.info("get_contributor Has Successfully Run.")
+    print(json.loads(out_json))
     return {"statusCode": 200, "body": json.loads(out_json)}
+
+x = lambda_handler({"ru_reference":"77700000002"},"")

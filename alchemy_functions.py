@@ -19,7 +19,7 @@ def table_model(engine, metadata, table_name):
     return table
 
 
-def select(select_sql, session):
+def select(select_sql, session, schema):
     """Fetches all rows from a table based on a prebuilt select statement
     and returns them in a Dataframe.
     Data comes back as a ResultProxy, it is then turned into a database with
@@ -32,12 +32,17 @@ def select(select_sql, session):
     Returns:
       table_dataframe (Dataframe):Results dataframe with table column headers.
     """
+    #print(select_sql)
     table_data = session.execute(select_sql).fetchall()
-    table_dataframe = pd.DataFrame(table_data)
-    if not table_dataframe.empty:
-        table_dataframe.columns = table_data[0].keys()
-    return table_dataframe
 
+    new_output = schema.dumps(table_data, table_data[0].keys())
+
+   # table_dataframe = pd.DataFrame(table_data)
+    #if not table_dataframe.empty:
+     #   table_dataframe.columns = table_data[0].keys()
+    import json
+    return json.loads(new_output.data)
+    #return table_dataframe
 
 def update(update_sql, session):
     """Updates or Inserts all rows into a table based on a prebuilt statement.

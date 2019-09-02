@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields
-
+import json
 
 class CombinedContributorSurveyPeriod(Schema):
     ru_reference = fields.Str(required=True)
@@ -78,6 +78,8 @@ class Contributor(Schema):
     telephone = fields.Str(required=True, allow_none=True)
     Surveys = fields.Nested(SurveyEnrolment(many=True), required=True,
                             allow_none=True)
+   # class Meta:
+    #    render_module = json
 
 
 class QueryTaskUpdates(Schema):
@@ -229,3 +231,12 @@ class AllReferenceData(Schema):
     VETsCodes = fields.Nested(VETsCodes(many=True), required=True)
     Surveys = fields.Nested(Surveys(many=True), required=True)
     GorRegions = fields.Nested(GorRegions(many=True), required=True)
+
+class SurveyContact(Schema):
+    contact_reference = fields.Str()
+    ru_reference = fields.Str()
+    survey_code = fields.Str()
+    effective_end_date = fields.Str()
+    effective_start_date = fields.Str()
+    contact = fields.Str()
+    survey_enrolment = fields.Str()
