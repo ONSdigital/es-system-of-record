@@ -13,12 +13,13 @@ logger = logging.getLogger("get_contributor")
 
 
 def lambda_handler(event, context):
-    """Collects data on a passed in Reference from six tables and combines
+    """
+    Collects data on a passed in Reference from six tables and combines
     them into a single Json.
     Parameters:
       event (Dict):A single key value pair of ru_reference and a string number.
     Returns:
-      out_json (Json):Nested Json responce of the six tables data.
+      out_json (Json):Nested Json response of the six tables data.
     """
 
     logger.info("get_contributor Has Started Running.")

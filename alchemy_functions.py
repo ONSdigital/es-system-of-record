@@ -4,7 +4,8 @@ import db_model as db
 
 
 def table_model(engine, metadata, table_name):
-    """Retrieve Table model from a file.
+    """
+    Retrieve Table model from a file.
     Parameters:
       engine (Engine):The prepared bind to allow a database session.
       metadata (MetaData):Basic Metadata object.
@@ -20,7 +21,8 @@ def table_model(engine, metadata, table_name):
 
 
 def select(select_sql, session):
-    """Fetches all rows from a table based on a prebuilt select statement
+    """
+    Fetches all rows from a table based on a prebuilt select statement
     and returns them in a Dataframe.
     Data comes back as a ResultProxy, it is then turned into a database with
     default column headers.
@@ -40,7 +42,8 @@ def select(select_sql, session):
 
 
 def update(update_sql, session):
-    """Updates or Inserts all rows into a table based on a prebuilt statement.
+    """
+    Updates or Inserts all rows into a table based on a prebuilt statement.
     Parameters:
       update_sql (Expression):SQL expression to be used.
       session (Session):An open session of the database you are searching.

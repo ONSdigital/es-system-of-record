@@ -13,7 +13,18 @@ logger = logging.getLogger("get_all_reference_data")
 
 
 def lambda_handler(event, context):
-    """Pull back from a database all reference data from five tables."""
+    """
+    Pulls back all data from the following tables -
+        query_type
+        vet
+        survey
+        gor_regions
+        ssr_old_regions
+    Parameters:
+        event (Dict):A series of key value pairs.
+    Returns:
+        out_json (Json):Nested Json response of the five tables data.
+    """
 
     logger.info("get_all_reference_data Has Started Running.")
 

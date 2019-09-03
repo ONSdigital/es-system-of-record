@@ -12,7 +12,8 @@ logger = logging.getLogger("update_survey_period")
 
 
 def lambda_handler(event, context):
-    """Takes a survey_period dictonary and updates the MI information based
+    """
+    Takes a survey_period dictionary and updates the MI information based
     in the new run.
     Parameters:
       event (Dict):A series of key value pairs.

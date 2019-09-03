@@ -14,7 +14,8 @@ logger = logging.getLogger("get_query_dashboard")
 
 # Same as findQuery but with one extra return key/value pair.
 def lambda_handler(event, context):
-    """Collects data on a passed in References from eight tables and combines
+    """
+    Collects data on a passed in References from eight tables and combines
     them into a single Json.
     Parameters:
       event (Dict):A series of key value pairs used in the search.
