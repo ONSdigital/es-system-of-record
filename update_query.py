@@ -13,7 +13,8 @@ logger = logging.getLogger("update_query")
 
 
 def lambda_handler(event, context):
-    """Takes a query dictionary and updates the related query tables and
+    """
+    Takes a query dictionary and updates the related query tables and
     inserts the new run information.
     Parameters:
       event (Dict):A series of key value pairs nested to match table structure.

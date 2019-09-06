@@ -1,4 +1,5 @@
-"""Blank Schema
+"""
+Blank Schema
 
 Revision ID: Empty_Database
 Revises:
@@ -14,12 +15,28 @@ depends_on = None
 
 
 def upgrade():
-    """Base empty function used during the alembic upgrade process."""
+    """
+    Base empty function used during the alembic upgrade process.
+        Parameters:
+        None
+        Returns:
+        None
+        Results:
+        Pass
+    """
 
     pass
 
 
 def downgrade():
-    """Base empty function used during the alembic downgrade proccess."""
+    """
+    Base empty function used during the alembic downgrade process.
+        Parameters:
+        None
+        Returns:
+        None
+        Results:
+        Pass
+    """
 
     pass

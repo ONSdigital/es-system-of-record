@@ -14,7 +14,8 @@ logger = logging.getLogger("get_survey_periods")
 
 
 def lambda_handler(event, context):
-    """Collects data on a passed in Reference from a table and returns a single
+    """
+    Collects data on a passed in Reference from a table and returns a single
     Json.
     Parameters:
       event (Dict):Two key value pairs used in the search.

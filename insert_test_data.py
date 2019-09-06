@@ -13,10 +13,17 @@ logger = logging.getLogger("insert_test_data")
 # If this fails to complete, you need to drop and recreate
 # the database to fix the query tables serialisation.
 def main():
-    """Load data from a file and attempt to insert data into the database.
+    """
+    Load data from a file and attempt to insert data into the database.
     Data is loaded in from a json file (data.json).
     For every table in the list call the insert function
     and pass in data to attemp insert into specified database.
+        Parameters:
+        None
+        Returns:
+        None
+        Results:
+        Loop through table list and call insert function
     """
 
     database = os.environ['Database_Location']
@@ -85,7 +92,8 @@ def main():
 
 
 def insert(engine, session, metadata, table_name, table_data):
-    """If data is not empty, retrieve table model and insert into it.
+    """
+    If data is not empty, retrieve table model and insert into it.
     Parameters:
       engine (Engine):The prepared bind to allow a database session.
       session (Session):A database session created from an engine.

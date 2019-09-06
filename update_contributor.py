@@ -11,7 +11,8 @@ logger = logging.getLogger("update_contributor")
 
 
 def lambda_handler(event, context):
-    """Takes a contributor dictonary and updates the comments.
+    """
+    Takes a contributor dictionary and updates the comments.
     Parameters:
       event (Dict):A series of key value pairs with the related comments to be
       added.

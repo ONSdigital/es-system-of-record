@@ -13,7 +13,8 @@ logger = logging.getLogger("get_query")
 
 
 def lambda_handler(event, context):
-    """Collects data on a passed in Reference from seven tables and combines
+    """
+    Collects data on a passed in Reference from seven tables and combines
     them into a single Json.
     Parameters:
       event (Dict):A series of key value pairs used in the search.
