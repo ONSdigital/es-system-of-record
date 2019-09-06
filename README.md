@@ -1,11 +1,25 @@
-# es-system-of-record
+# es-system-of-record 
+
+<a id='top'>
+
 Contains code used to create the system of records, insert some test data and interact 
 with said data through a series of updates, inserts and selects.<br><br>
 Designed to be used as lambda on aws. The use of alembic and sqlalchemy means that this
  will(should) be database agnostic.
 <hr>
 
+##### Contents
+[Testing Instructions](#test)<br>
+[File listing](#files)<br>
+[Example input params](#input)<br>
+[Technical Debt](#td)<br>
+[Useful Links](#links)<br>
+
+
+<hr>
+
 **Test Instructions** <br>
+<a id='test'>
 To run the basic tests, you just need to:
 1 - Build:
 
@@ -55,7 +69,9 @@ same way, eg:
 ```
 Database_Location=<thesqlalchemy.url> python get_query.py
 ```
+[(Back to top)](#top)
 <hr>
+<a id='files'>
 
 **Query Lambda** <br>
 create_query -> For inserting new queries into database<br>
@@ -68,6 +84,7 @@ update_query -> Update a query<br>
 update_survey_period -> Update a survey/period<br>
 update_contributor -> Update a contributor<br>
 <br>
+[(Back to top)](#top)
 
 **Non-sor Functions**<br>
 insert_test_data -> Inserts test data into database to enable each of the lambda to be 
@@ -82,8 +99,9 @@ alchemy_functions.py -> Used by all of the system of records query lambda. Provi
 standard functions for using sqlalchemy.<br>
 README -> This file.....
 
+[(Back to top)](#top)
 
-## Example input parameters to methods
+## Example input parameters to methods <a id='input'>
 Example data to use in calling the methods.:
 
 ```
@@ -273,3 +291,24 @@ Update Query:
     ]
   }
 ```
+[(Back to top)](#top)
+
+<hr>
+
+**Technical Debt** <a id='td'>
+1) Lots of the INSERTS have On Conflict Do Nothing or Do Update. These may need to be removed or have more conditions on them.
+2) Code sometimes allows to work and sometimes doesn't the functions if no rows are returned from the gets. This will need some refinement.
+3) Current SQL based on the IBM BPM Alpha and do not represent an accurate picture of what data should be allowed to be updated.
+
+[(Back to top)](#top)
+
+<hr>
+
+**Useful Links** <a id='links'>
+<br>
+
+[Alembic](https://collaborate2.ons.gov.uk/confluence/pages/viewpage.action?spaceKey=ESD&title=Alembic+Migrations) 
+
+[API Gateway](https://collaborate2.ons.gov.uk/confluence/display/ESD/AWS+API+Gateway)
+
+[(Back to top)](#top)
